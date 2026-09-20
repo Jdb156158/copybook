@@ -58,8 +58,8 @@
     return s;
   }
 
-  /* ---------------- 单个格 ---------------- */
-  function renderCell(cell, settings, m, gridSVGStr, pySVGStr) {
+  /* ---------------- 单个格（汉字） ---------------- */
+  function renderCell(cell, settings, m, gridSVGStr) {
     var fs = fontStack(settings.font);
     var isFour = m.four;
     var fourMode = settings.grid === 'sixiang';
@@ -68,18 +68,6 @@
       'font-family:' + fs.stack + ';' + (fs.weight ? 'font-weight:' + fs.weight + ';' : '');
 
     var inner = '';
-
-    /* 拼音行 */
-    if (m.pyH > 0) {
-      var pyShow = '';
-      if (cell.role === 'demo' || (cell.role === 'trace' && settings.tracePinyin !== false && settings.trace)) {
-        pyShow = pyText(cell.py, settings.pinyinStyle);
-      }
-      var pyOpacity = cell.role === 'trace' ? (parseFloat(settings.traceOpacity) || 0.25) : 1;
-      inner += '<div class="cb-py" style="height:' + m.pyH + 'px;font-size:' +
-        (m.pyH * 0.56) + 'px">' + pySVGStr +
-        '<span class="cb-py-t" style="opacity:' + pyOpacity + '">' + esc(pyShow) + '</span></div>';
-    }
 
     /* 主体 */
     if (cell.pattern || settings.mode === 'pattern') {
@@ -115,16 +103,37 @@
 
     var html = '<div class="cb-body">';
     var rows = Math.ceil(pageCells.length / m.cols);
-    var r, c, i = 0;
+    var r, c, base;
+    var pyGap = 2 * L.PX;
     for (r = 0; r < rows; r++) {
-      html += '<div class="cb-row" style="height:' + (m.cellH + m.pyH) + 'px;margin-bottom:' + m.rowGap + 'px">';
+      base = r * m.cols;
+      /* 拼音独立成行：每个汉字格正上方一格四线三格 */
+      if (m.pyH > 0) {
+        html += '<div class="cb-row cb-pinyin-row" style="height:' + m.pyH + 'px;margin-bottom:' + pyGap + 'px">';
+        for (c = 0; c < m.cols; c++) {
+          var pc = pageCells[base + c];
+          var pyShow = '';
+          if (pc && pc.py) {
+            var showPy = pc.role === 'demo' ||
+              (pc.role === 'trace' && settings.tracePinyin !== false && settings.trace) ||
+              pc.role === 'blank';
+            if (showPy) pyShow = pyText(pc.py, settings.pinyinStyle);
+          }
+          html += '<div class="cb-py" style="width:' + m.cellW + 'px;height:' + m.pyH + 'px;font-size:' +
+            (m.pyH * 0.56) + 'px">' + pyStr +
+            '<span class="cb-py-t">' + esc(pyShow) + '</span></div>';
+        }
+        html += '</div>';
+      }
+      /* 汉字行 */
+      html += '<div class="cb-row" style="height:' + m.cellH + 'px;margin-bottom:' + m.rowGap + 'px">';
       for (c = 0; c < m.cols; c++) {
-        var cell = pageCells[i++];
+        var cell = pageCells[base + c];
         if (!cell) {
           html += '<div class="cb-cell cb-role-empty" style="width:' + m.cellW + 'px;height:' +
-            (m.cellH + m.pyH) + 'px"></div>';
+            m.cellH + 'px"></div>';
         } else {
-          html += renderCell(cell, settings, m, gridStr, pyStr);
+          html += renderCell(cell, settings, m, gridStr);
         }
       }
       html += '</div>';

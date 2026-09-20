@@ -102,9 +102,11 @@
 
     var cellW = (availW - spacing * (cols - 1)) / cols;
     var cellH = four ? cellW * 1.15 : cellW * (parseFloat(settings.cellRatio) || 1);
-    var pyH = showPinyin ? Math.min(cellW * 0.38, cellH * 0.38) : 0;
+    var pyH = showPinyin ? Math.min(cellW * 0.34, cellH * 0.34) : 0;
+    var pyGap = 2 * PX;
     var rowGap = (parseFloat(settings.rowGap) || 3) * PX;
-    var rowH = cellH + pyH + rowGap;
+    /* 拼音独立成行：每行 = 拼音行(pyH) + 小间距(pyGap) + 汉字行(cellH) + 行距(rowGap) */
+    var rowH = showPinyin ? (pyH + pyGap + cellH + rowGap) : (cellH + rowGap);
     var availH = size.h - margin * 2 - headerH - (settings.showPageNumber ? 8 * PX : 0);
 
     var rowsPerPage = Math.max(1, Math.floor((availH + rowGap) / (rowH + rowGap)));
