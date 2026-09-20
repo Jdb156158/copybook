@@ -473,6 +473,8 @@
       updateInputHint();
       buildMaterials();
     }
+    /* 内容类型或「显示拼音」开关变化后，拼音校对区要跟着显隐 */
+    if (key === 'mode' || key === 'showPinyin') renderPyCheck();
     schedulePreview();
   }
 
@@ -559,7 +561,8 @@
   function renderPyCheck() {
     var box = $('#pyCheck');
     var s = S.get();
-    if (s.mode !== 'hanzi') {
+    /* 只有真正在字帖上显示拼音的模板（mode=hanzi 且 showPinyin）才需要校对 */
+    if (s.mode !== 'hanzi' || !s.showPinyin) {
       $('#pyBlock').hidden = true;
       return;
     }
@@ -793,7 +796,6 @@
     var TABS = [
       { tab: 'tpl', label: '模板', html: icon('book') },
       { tab: 'content', label: '内容', html: icon('write') },
-      { tab: 'py', label: '拼音', html: icon('pinyin') },
       { tab: 'set', label: '设置', html: icon('hanzi') },
       { tab: 'print', label: '打印', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9V3.5h11V9M6.5 18H5a1.5 1.5 0 0 1-1.5-1.5V12A1.5 1.5 0 0 1 5 10.5h14A1.5 1.5 0 0 1 20.5 12v4.5A1.5 1.5 0 0 1 19 18h-1.5M6.5 14h11v6.5h-11z"/></svg>' },
       { tab: 'theme', label: '主题', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>' }
@@ -818,9 +820,9 @@
     document.body.appendChild(tabbar);
     document.body.appendChild(sheet);
 
-    /* 重排控件：把桌面面板里的各区块移入对应面板容器 */
+    /* 重排控件：把桌面面板里的各区块移入对应面板容器（拼音校对并入「内容」） */
     var pans = {};
-    ['tpl', 'content', 'py', 'set'].forEach(function (k) {
+    ['tpl', 'content', 'set'].forEach(function (k) {
       var d = document.createElement('div');
       d.className = 'phone-pan';
       d.setAttribute('data-pan', k);
@@ -833,16 +835,16 @@
     var contentBlock = document.querySelector('#panel .block');
     if (contentBlock) pans.content.appendChild(contentBlock);
     var pyBlock = document.getElementById('pyBlock');
-    if (pyBlock) pans.py.appendChild(pyBlock);
+    if (pyBlock) pans.content.appendChild(pyBlock);
     var panelSettings = document.getElementById('panelSettings');
     if (panelSettings) pans.set.appendChild(panelSettings);
     var panelFoot = document.querySelector('.panel-foot');
     if (panelFoot) panelFoot.style.display = 'none';
 
-    var TITLES = { tpl: '模板库', content: '练习内容', py: '拼音校对', set: '字格与样式' };
+    var TITLES = { tpl: '模板库', content: '练习内容', set: '字格与样式' };
 
     function openSheet(k) {
-      ['tpl', 'content', 'py', 'set'].forEach(function (x) { pans[x].hidden = x !== k; });
+      ['tpl', 'content', 'set'].forEach(function (x) { pans[x].hidden = x !== k; });
       sheet.querySelector('.sheet-title').textContent = TITLES[k] || '设置';
       sheet.classList.add('open');
       tabbar.querySelectorAll('.ptab').forEach(function (b) {
