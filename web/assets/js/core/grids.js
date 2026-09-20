@@ -107,6 +107,9 @@
       case 'hengxian': // 单行横线
         g = line(0, 96, 100, 96, main, sw);
         break;
+      case 'shuxian': // 竖线格（中竖辅助线，竖写对齐）
+        g = line(50, 0, 50, 100, main, sw, dash);
+        break;
       case 'none': // 无格
         g = '';
         break;
@@ -261,6 +264,7 @@
       { id: 'zhongxin', name: '中心格', desc: '仅中心定位点' },
       { id: 'sixiang', name: '四线三格', desc: '拼音 / 英文专用' },
       { id: 'hengxian', name: '单行横线', desc: '自由书写' },
+      { id: 'shuxian', name: '竖线格', desc: '竖写对齐辅助' },
       { id: 'none', name: '无格线', desc: '纯空白练习' }
     ]
   };

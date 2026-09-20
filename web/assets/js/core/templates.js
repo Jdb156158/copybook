@@ -278,6 +278,167 @@
         trace: false, rowGap: 5, font: 'kaiti', showSignature: true,
         header: { title: '', fields: [], score: false }
       }
+    },
+
+    /* ------- 以下为 zidianba.com/templates 去重后补充的模板 ------- */
+    {
+      id: 'mizi-blank', name: '米字格空白', tag: '通用', icon: 'blank',
+      desc: '米字格空白页，可自由书写或打印手写，主题色可切换',
+      sample: '',
+      settings: {
+        mode: 'hanzi', grid: 'mizi', showPinyin: false, cols: 10, repeat: 1,
+        trace: false, rowGap: 3
+      }
+    },
+    {
+      id: 'fang-blank', name: '方格空白', tag: '通用', icon: 'blank',
+      desc: '干净方格空白页，抄写与自由书写两用',
+      sample: '',
+      settings: {
+        mode: 'composition', grid: 'fang', showPinyin: false, cols: 14, repeat: 1,
+        trace: false, rowGap: 2
+      }
+    },
+    {
+      id: 'shengzi', name: '生字本', tag: '课堂', icon: 'hanzi',
+      desc: '田字格 + 拼音 + 头行，贴近小学语文课堂生字纸',
+      sample: '天地人你我他山水田上下左右',
+      settings: {
+        mode: 'hanzi', grid: 'tianzi', showPinyin: true, cols: 9, repeat: 2,
+        trace: true, traceOpacity: 0.25, rowGap: 3, font: 'kaiti',
+        header: { title: '生字本', fields: ['姓名', '班级', '日期'], score: false }
+      }
+    },
+    {
+      id: 'math-note', name: '数学本', tag: '数学', icon: 'num',
+      desc: '横线格数学练习本，对齐数位与等号，适合竖式与步骤',
+      sample: '12+34=46  56-23=33  7×8=56  81÷9=9',
+      settings: {
+        mode: 'number', grid: 'hengxian', showPinyin: false, cols: 3, repeat: 1,
+        trace: false, rowGap: 8, dash: false, lineWidth: 1, font: 'kaiti',
+        header: { title: '数学练习', fields: ['姓名', '日期'], score: false }
+      }
+    },
+    {
+      id: 'hardpen-hline', name: '硬笔横线格', tag: '硬笔', icon: 'write',
+      desc: '实线横线格，稳定行距与水平，适合楷书连写与长句抄写',
+      sample: '横平竖直，撇捺舒展，结构匀称，重心平稳。每日一练，贵在坚持。',
+      settings: {
+        mode: 'hanzi', grid: 'hengxian', showPinyin: false, cols: 18, repeat: 1,
+        trace: false, rowGap: 10, dash: false, lineWidth: 1, font: 'kaiti',
+        header: { title: '硬笔书法练习', fields: ['姓名', '日期'], score: false }
+      }
+    },
+    {
+      id: 'hengxian-dash', name: '横虚线格', tag: '硬笔', icon: 'write',
+      desc: '虚线横线提示基线与行距，版面轻盈，整齐不死板',
+      sample: '轻盈的虚线，写完卷面更干净。先慢写找齐线，再加快速度。',
+      settings: {
+        mode: 'hanzi', grid: 'hengxian', showPinyin: false, cols: 18, repeat: 1,
+        trace: false, rowGap: 10, dash: true, lineWidth: 1, font: 'kaiti',
+        header: { title: '横虚线书写', fields: ['姓名'], score: false }
+      }
+    },
+    {
+      id: 'hardpen-vline', name: '硬笔竖线格', tag: '硬笔', icon: 'write',
+      desc: '中竖辅助线，看清列齐与相对位置，是方格到无格的过渡',
+      sample: '中竖一线，列齐字正。由格入无，渐成章法。',
+      settings: {
+        mode: 'hanzi', grid: 'shuxian', showPinyin: false, cols: 12, repeat: 1,
+        trace: false, rowGap: 4, dash: false, lineWidth: 1, font: 'kaiti',
+        header: { title: '竖线格练习', fields: ['姓名', '日期'], score: false }
+      }
+    },
+    {
+      id: 'shuxian-dash', name: '竖虚线格', tag: '硬笔', icon: 'write',
+      desc: '竖虚线提示对齐，视觉更轻，写完卷面更清爽',
+      sample: '虚线不抢笔画，写稳后可逐步减少对它的依赖。',
+      settings: {
+        mode: 'hanzi', grid: 'shuxian', showPinyin: false, cols: 12, repeat: 1,
+        trace: false, rowGap: 4, dash: true, lineWidth: 1, font: 'kaiti',
+        header: { title: '竖虚线练习', fields: ['姓名'], score: false }
+      }
+    },
+    {
+      id: 'radical-practice', name: '偏旁部首', tag: '启蒙', icon: 'stroke',
+      desc: '预填常用偏旁部件，先把偏旁写稳再组字',
+      sample: '氵讠亻扌木忄彳辶纟钅火犭口日',
+      settings: {
+        mode: 'hanzi', grid: 'tianzi', showPinyin: false, cols: 9, repeat: 2,
+        trace: true, traceOpacity: 0.25, rowGap: 3, font: 'kaiti',
+        header: { title: '偏旁部首练习', fields: ['姓名', '日期'], score: false }
+      }
+    },
+    {
+      id: 'number-cards', name: '数字识字卡', tag: '启蒙', icon: 'num',
+      desc: '一二到零米字格临摹，含拼音，适合数字汉字启蒙',
+      sample: '一二三四五六七八九十零',
+      settings: {
+        mode: 'hanzi', grid: 'mizi', showPinyin: true, cols: 9, repeat: 2,
+        trace: true, traceOpacity: 0.3, rowGap: 3, font: 'kaiti',
+        header: { title: '数字识字卡', fields: ['姓名'], score: false }
+      }
+    },
+    {
+      id: 'name-mizi', name: '姓名练字帖', tag: '启蒙', icon: 'hanzi',
+      desc: '米字格姓名临摹描红，大字反复书写',
+      sample: '李小明',
+      settings: {
+        mode: 'hanzi', grid: 'mizi', showPinyin: true, cols: 8, repeat: 5,
+        trace: true, traceOpacity: 0.18, rowGap: 3, font: 'kaiti',
+        header: { title: '姓名练习', fields: ['姓名'], score: false }
+      }
+    },
+    {
+      id: 'mingpian-trace', name: '名篇描红', tag: '作品', icon: 'poem',
+      desc: '竖线格虚线楷体描红，临写名篇，标题可自填',
+      sample: '先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。',
+      settings: {
+        mode: 'vertical', grid: 'shuxian', showPinyin: false, cols: 0, repeat: 1,
+        trace: true, traceOpacity: 0.2, vertical: true, rowGap: 2, font: 'kaiti',
+        cellSizeV: 20, dash: true,
+        header: { title: '出师表（节选）', fields: [], score: false }
+      }
+    },
+    {
+      id: 'diary', name: '日记书写纸', tag: '通用', icon: 'write',
+      desc: '横线格 + 日期天气栏，适合每日日记与周记',
+      sample: '今天天气晴朗，我和爸爸妈妈去公园放风筝。春风暖暖的，真开心！',
+      settings: {
+        mode: 'hanzi', grid: 'hengxian', showPinyin: false, cols: 18, repeat: 1,
+        trace: false, rowGap: 10, dash: false, lineWidth: 1, font: 'kaiti',
+        header: { title: '日记', fields: ['日期', '天气'], score: false }
+      }
+    },
+    {
+      id: 'growth-log', name: '成长记录', tag: '通用', icon: 'book',
+      desc: '横线格 + 日期/心情/事件栏，手账风成长记录',
+      sample: '学会了自己系鞋带，还得到了老师的表扬，心里美滋滋的。',
+      settings: {
+        mode: 'hanzi', grid: 'hengxian', showPinyin: false, cols: 18, repeat: 1,
+        trace: false, rowGap: 10, dash: false, lineWidth: 1, font: 'kaiti',
+        header: { title: '成长记录', fields: ['日期', '心情', '事件'], score: false }
+      }
+    },
+    {
+      id: 'months-card', name: '月份单词卡', tag: '英语', icon: 'abc',
+      desc: '1-12 月英文单词卡，临写记忆，标题可自填',
+      sample: 'January February March April May June July August September October November December',
+      settings: {
+        mode: 'english', grid: 'fang', showPinyin: false, cols: 4, repeat: 1,
+        trace: true, traceOpacity: 0.3, rowGap: 4, font: 'english',
+        header: { title: 'Months 月份单词卡', fields: ['Name', 'Date'], score: false }
+      }
+    },
+    {
+      id: 'creative-writing', name: '创意书写纸', tag: '通用', icon: 'write',
+      desc: '大方格自由书写，适合主题创作与手抄报配套',
+      sample: '',
+      settings: {
+        mode: 'composition', grid: 'fang', showPinyin: false, cols: 10, repeat: 1,
+        trace: false, rowGap: 2, font: 'kaiti',
+        header: { title: '创意书写', fields: ['主题', '姓名'], score: false }
+      }
     }
   ];
 
