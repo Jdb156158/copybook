@@ -265,7 +265,7 @@
       desc: '纯格子，任你自由发挥',
       sample: '',
       settings: {
-        mode: 'composition', grid: 'tianzi', showPinyin: false, cols: 8, repeat: 1,
+        mode: 'composition', grid: 'none', showPinyin: false, cols: 8, repeat: 1,
         trace: false, rowGap: 3
       }
     },
@@ -307,16 +307,6 @@
         mode: 'hanzi', grid: 'tianzi', showPinyin: true, cols: 9, repeat: 2,
         trace: true, traceOpacity: 0.25, rowGap: 3, font: 'kaiti',
         header: { title: '生字本', fields: ['姓名', '班级', '日期'], score: false }
-      }
-    },
-    {
-      id: 'math-note', name: '数学本', tag: '数学', icon: 'num',
-      desc: '横线格数学练习本，对齐数位与等号，适合竖式与步骤',
-      sample: '12+34=46  56-23=33  7×8=56  81÷9=9',
-      settings: {
-        mode: 'number', grid: 'hengxian', showPinyin: false, cols: 3, repeat: 1,
-        trace: false, rowGap: 8, dash: false, lineWidth: 1, font: 'kaiti',
-        header: { title: '数学练习', fields: ['姓名', '日期'], score: false }
       }
     },
     {

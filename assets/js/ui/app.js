@@ -811,7 +811,10 @@
     renderPyCheck();
     renderPreview();
     fitZoom();
-    $('#statTpl').textContent = T.TEMPLATES.length;
+    var tplN = T.TEMPLATES.length;
+    $('#statTpl').textContent = tplN;
+    var heroBtn = $('#heroTplBtn'); if (heroBtn) heroBtn.textContent = '浏览 ' + tplN + ' 种模板';
+    var gDesc = $('#galleryDesc'); if (gDesc) gDesc.textContent = tplN + ' 种常用字帖版式，点一下即可套用，再微调成自己的。';
     if (PHONE) initPhone();
   }
 
