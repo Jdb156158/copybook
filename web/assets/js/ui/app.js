@@ -302,6 +302,7 @@
     if (clean !== S.get().text) S.set('text', clean, true);
     $('#textInput').value = S.get().text || '';
     updateInputHint();
+    buildMaterials();
     updateTplCurrent();
     renderPyCheck();
     schedulePreview();
@@ -323,9 +324,32 @@
   }
 
   /* ---------------- 素材 ---------------- */
+  /* 素材按当前模板的内容类型动态筛选 */
+  var MODE_DESC = {
+    hanzi: '汉字练习', composition: '汉字抄写', vertical: '竖排书写',
+    pinyin: '拼音练习', english: '英文练习', number: '数字练习',
+    stroke: '基本笔画', pattern: '控笔训练'
+  };
+  var matBound = false;
+
   function buildMaterials() {
     var wrap = $('#matGrid');
-    wrap.innerHTML = T.MATERIALS.map(function (g) {
+    var mode = S.get().mode;
+    var groups = T.materialsForMode(mode);
+    var sec = $('#materials');
+    var btn = $('#btnMaterial');
+
+    /* stroke（基本笔画）/ pattern（控笔训练）用内置笔画与图案，不吃输入文本：隐藏素材区与入口 */
+    if (!groups.length) {
+      if (sec) sec.hidden = true;
+      if (btn) btn.hidden = true;
+      wrap.innerHTML = '';
+      return;
+    }
+    if (sec) sec.hidden = false;
+    if (btn) btn.hidden = false;
+
+    wrap.innerHTML = groups.map(function (g) {
       return '<div class="mat-card"><div class="mat-head">' + icon(g.icon) +
         '<b>' + esc(g.name) + '</b><span>' + g.items.length + ' 篇</span></div>' +
         '<div class="mat-list">' + g.items.map(function (it, i) {
@@ -334,6 +358,14 @@
         }).join('') + '</div></div>';
     }).join('');
 
+    var desc = $('#materialsDesc');
+    if (desc) {
+      desc.textContent = '已按当前模板（' + (MODE_DESC[mode] || '当前模板') + '）筛选出 ' +
+        groups.length + ' 类可用素材，点开即用。';
+    }
+
+    if (matBound) return;
+    matBound = true;
     wrap.addEventListener('click', function (e) {
       var btn = e.target.closest('.mat-item');
       if (!btn) return;
@@ -362,7 +394,9 @@
 
   function openMaterialModal() {
     var body = $('#modalBody');
-    body.innerHTML = T.MATERIALS.map(function (g) {
+    var groups = T.materialsForMode(S.get().mode);
+    if (!groups.length) { toast('当前模板使用内置内容，无需选择素材'); return; }
+    body.innerHTML = groups.map(function (g) {
       return '<div class="modal-mat-group"><div class="modal-mat-title">' + esc(g.name) + '</div>' +
         '<div class="modal-mat-items">' + g.items.map(function (it, i) {
           return '<button type="button" class="chip" data-g="' + g.id + '" data-i="' + i + '">' +
@@ -432,6 +466,13 @@
     S.set(key, value);
     if (PANEL_REBUILD_KEYS[key]) buildPanel(true);
     else syncVisibility();
+    /* 手动切换内容类型（mode）时，素材库与输入提示都要跟着变 */
+    if (key === 'mode') {
+      var clean = sanitizeText(S.get().text, value);
+      if (clean !== S.get().text) { S.set('text', clean, true); $('#textInput').value = clean; }
+      updateInputHint();
+      buildMaterials();
+    }
     schedulePreview();
   }
 

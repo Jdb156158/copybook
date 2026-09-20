@@ -2,6 +2,8 @@
  * app.css —— 页面布局 + 字帖渲染区样式
  * ========================================================== */
 main { position: relative; z-index: 1; }
+/* 保证 hidden 属性不被组件自身的 display 覆盖 */
+[hidden] { display: none !important; }
 
 /* ---------------- 顶栏 ---------------- */
 .topbar {
