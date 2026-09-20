@@ -39,15 +39,20 @@
     { t: '示儿', a: '陆游', c: '死去元知万事空，但悲不见九州同。王师北定中原日，家祭无忘告乃翁。' }
   ];
 
+  /* 汉字类素材适用的模板模式（拼音 / 英文 / 数字模板不列汉字素材） */
+  var HANZI_MODES = ['hanzi', 'composition', 'vertical'];
+
   var MATERIALS = [
     {
       id: 'poem', name: '小学必背古诗', icon: 'poem',
+      modes: HANZI_MODES,
       items: POEMS.map(function (p) {
         return { name: p.t + '·' + p.a, text: p.t + '\n' + p.a + '\n' + p.c.replace(/[，。、？！]/g, '') };
       })
     },
     {
       id: 'sanzi', name: '三字经', icon: 'book',
+      modes: HANZI_MODES,
       items: [
         { name: '三字经·开篇', text: '人之初性本善性相近习相远苟不教性乃迁教之道贵以专昔孟母择邻处子不学断机杼窦燕山有义方教五子名俱扬' },
         { name: '三字经·勤学', text: '玉不琢不成器人不学不知义为人子方少时亲师友习礼仪香九龄能温席孝于亲所当执融四岁能让梨弟于长宜先知' },
@@ -56,6 +61,7 @@
     },
     {
       id: 'dizigui', name: '弟子规', icon: 'book',
+      modes: HANZI_MODES,
       items: [
         { name: '弟子规·总叙', text: '弟子规圣人训首孝悌次谨信泛爱众而亲仁有余力则学文' },
         { name: '弟子规·入则孝', text: '父母呼应勿缓父母命行勿懒父母教须敬听父母责须顺承冬则温夏则凊晨则省昏则定出必告反必面居有常业无变' }
@@ -63,6 +69,7 @@
     },
     {
       id: 'qianziwen', name: '千字文', icon: 'book',
+      modes: HANZI_MODES,
       items: [
         { name: '千字文·开篇', text: '天地玄黄宇宙洪荒日月盈昃辰宿列张寒来暑往秋收冬藏闰余成岁律吕调阳' },
         { name: '千字文·修身', text: '女慕贞洁男效才良知过必改得能莫忘罔谈彼短靡恃己长信使可覆器欲难量' }
@@ -70,6 +77,7 @@
     },
     {
       id: 'baijiaxing', name: '百家姓', icon: 'book',
+      modes: HANZI_MODES,
       items: [
         { name: '百家姓·一', text: '赵钱孙李周吴郑王冯陈褚卫蒋沈韩杨朱秦尤许何吕施张孔曹严华金魏陶姜' },
         { name: '百家姓·二', text: '戚谢邹喻柏水窦章云苏潘葛奚范彭郎鲁韦昌马苗凤花方俞任袁柳酆鲍史唐' }
@@ -77,6 +85,7 @@
     },
     {
       id: 'pinyin', name: '汉语拼音', icon: 'pinyin',
+      modes: ['pinyin'],
       items: [
         { name: '声母表', text: 'b p m f d t n l g k h j q x zh ch sh r z c s y w', mode: 'pinyin' },
         { name: '韵母表', text: 'a o e i u ü ai ei ui ao ou iu ie üe er an en in un ün ang eng ing ong', mode: 'pinyin' },
@@ -86,6 +95,7 @@
     },
     {
       id: 'english', name: '英文字母', icon: 'abc',
+      modes: ['english'],
       items: [
         { name: '大写 A-Z', text: 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z', mode: 'english' },
         { name: '小写 a-z', text: 'a b c d e f g h i j k l m n o p q r s t u v w x y z', mode: 'english' },
@@ -95,6 +105,7 @@
     },
     {
       id: 'number', name: '数字与算术', icon: 'num',
+      modes: ['number'],
       items: [
         { name: '数字 0-9', text: '0 1 2 3 4 5 6 7 8 9', mode: 'number' },
         { name: '0-20 数数', text: '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20', mode: 'number' },
@@ -104,6 +115,7 @@
     },
     {
       id: 'shizi', name: '启蒙识字', icon: 'hanzi',
+      modes: HANZI_MODES,
       items: [
         { name: '数字汉字', text: '一二三四五六七八九十百千万' },
         { name: '人体与自然', text: '人口手足目耳头心天地日月水火山石田土木禾竹米雨云风雪' },
@@ -114,6 +126,7 @@
     },
     {
       id: 'chengyu', name: '成语积累', icon: 'hanzi',
+      modes: HANZI_MODES,
       items: [
         { name: '数字成语', text: '一心一意三心二意四面八方五湖四海七上八下九牛一毛十全十美' },
         { name: '动物成语', text: '龙飞凤舞画蛇添足亡羊补牢守株待兔狐假虎威鹤立鸡群' },
@@ -461,9 +474,24 @@
     { id: 'Letter', name: 'Letter', w: 215.9, h: 279.4 }
   ];
 
+  /**
+   * 取当前模板可用的素材组（内容类型不匹配的不列出）
+   * stroke（基本笔画）/ pattern（控笔训练）用内置笔画与图案，不吃输入文本，故无素材
+   * @param {string} mode 当前模板的 settings.mode
+   * @return {Array} 可用的素材组
+   */
+  function materialsForMode(mode) {
+    if (mode === 'stroke' || mode === 'pattern') return [];
+    return MATERIALS.filter(function (g) {
+      if (!g.modes) return true;
+      return g.modes.indexOf(mode) >= 0;
+    });
+  }
+
   global.CBTemplates = {
     TEMPLATES: TEMPLATES,
     MATERIALS: MATERIALS,
+    materialsForMode: materialsForMode,
     POEMS: POEMS,
     FONTS: FONTS,
     PALETTES: PALETTES,
