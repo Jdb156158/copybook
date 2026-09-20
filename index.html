@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>字帖小助手 · 在线字帖生成器 | 田字格 / 米字格 / 拼音 / 英文 / 古诗 一键排版打印</title>
+<meta name="description" content="字帖小助手：免费在线字帖生成器，田字格、米字格、回宫格、九宫格、四线三格、作文格、竖排古诗、控笔训练，自动标注拼音、描红临摹、A4 直接打印或导出 PDF。">
+<link rel="stylesheet" href="assets/css/theme.css">
+<link rel="stylesheet" href="assets/css/app.css">
+<link rel="stylesheet" href="assets/css/print.css" media="print">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231a1815'/%3E%3Cpath d='M22 30h56M22 50h56M22 70h56M50 22v56' stroke='%23f0ebe1' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<div class="paper-grain" aria-hidden="true"></div>
+
+<!-- ============ 顶栏 ============ -->
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40"><rect x="4" y="4" width="32" height="32" rx="7"/><path d="M11 14h18M11 20h18M11 26h18M20 11v18"/></svg>
+      </span>
+      <span class="brand-text">
+        <strong>字帖小助手</strong>
+        <em>Copybook Helper</em>
+      </span>
+    </a>
+
+    <nav class="topnav">
+      <a href="#studio" class="is-active">生成器</a>
+      <a href="#gallery">模板库</a>
+      <a href="#materials">素材</a>
+      <a href="#guide">使用说明</a>
+    </nav>
+
+    <div class="topbar-actions">
+      <a class="icon-btn" href="https://github.com/Jdb156158/copybook" target="_blank" rel="noopener"
+        title="GitHub 仓库：Jdb156158/copybook" aria-label="GitHub 仓库">
+        <svg class="i-github" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-1.94c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.4-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+      </a>
+      <button class="icon-btn" id="themeToggle" title="切换深浅主题" aria-label="切换主题">
+        <svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" id="btnResetTop">重置</button>
+      <button class="btn btn-primary btn-sm" id="btnPrintTop">
+        <svg viewBox="0 0 24 24" class="btn-ico"><path d="M6.5 9V3.5h11V9M6.5 18H5a1.5 1.5 0 0 1-1.5-1.5V12A1.5 1.5 0 0 1 5 10.5h14A1.5 1.5 0 0 1 20.5 12v4.5A1.5 1.5 0 0 1 19 18h-1.5M6.5 14h11v6.5h-11z"/></svg>
+        打印 / 存 PDF
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ Hero ============ -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow"><i class="dot"></i>免费 · 免注册 · 离线可用</span>
+        <h1>把要练的字，<br><em>排成一张好纸</em></h1>
+        <p class="hero-sub">
+          输入汉字、拼音、英文或古诗，自动标注读音、描红临摹、分页排版，
+          一键打印出可以直接写的字帖。老师备课、家长陪练、成人练字都好用。
+        </p>
+        <div class="hero-cta">
+          <a href="#studio" class="btn btn-primary btn-lg">开始生成字帖</a>
+          <a href="#gallery" class="btn btn-ghost btn-lg">浏览 16 种模板</a>
+        </div>
+        <ul class="hero-stats">
+          <li><b id="statTpl">16</b><span>字帖模板</span></li>
+          <li><b>20992</b><span>汉字拼音库</span></li>
+          <li><b>12</b><span>字格类型</span></li>
+          <li><b>A4</b><span>直接打印</span></li>
+        </ul>
+      </div>
+
+      <div class="hero-visual" id="heroVisual">
+        <div class="stack">
+          <div class="sheet sheet-3" aria-hidden="true"></div>
+          <div class="sheet sheet-2" aria-hidden="true"></div>
+          <div class="sheet sheet-1"></div>
+        </div>
+        <div class="hero-badge" id="heroBadge" title="点击切换下一款模板">
+          <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          <span id="heroBadgeText">所见即所得</span>
+          <svg class="hero-badge-next" viewBox="0 0 24 24"><path d="M5 12h13M13 6.5l5.5 5.5-5.5 5.5"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 工作台 ============ -->
+  <section class="studio" id="studio">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">字帖工作台</h2>
+        <p class="section-desc">左侧调参数，右侧实时预览，满意了直接打印。</p>
+      </div>
+      <div class="section-meta" id="studioMeta">—</div>
+    </div>
+
+    <div class="studio-grid">
+      <!-- 控制面板 -->
+      <aside class="panel" id="panel">
+        <div class="panel-top">
+          <button class="tpl-current" id="tplCurrent" type="button">
+            <span class="tpl-current-ico" id="tplCurrentIco"></span>
+            <span class="tpl-current-copy">
+              <b id="tplCurrentName">拼音田字格</b>
+              <small id="tplCurrentDesc">生字 + 拼音 + 描红</small>
+            </span>
+            <svg class="tpl-current-arrow" viewBox="0 0 16 16"><path d="M4 6.5 8 10.5 12 6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <div class="panel-scroll">
+          <!-- 内容 -->
+          <section class="block">
+            <div class="block-head">
+              <span class="block-title">练习内容</span>
+              <button class="btn btn-ghost btn-xs" id="btnMaterial">
+                <svg viewBox="0 0 24 24" class="btn-ico"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h4l2 2.5h7A1.5 1.5 0 0 1 20 8v9.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5Z"/></svg>
+                素材库
+              </button>
+            </div>
+            <textarea id="textInput" class="content-input" spellcheck="false"
+              placeholder="输入要练习的内容，可用换行分段。&#10;例如：天地人你我他&#10;古诗、单词、拼音均可，系统会自动分段排版。"></textarea>
+            <div class="quick-row">
+              <span class="quick-label">快捷</span>
+              <button class="quick" data-quick="poem">静夜思</button>
+              <button class="quick" data-quick="name">姓名练习</button>
+              <button class="quick" data-quick="clear">清空</button>
+            </div>
+          </section>
+
+          <!-- 拼音校对 -->
+          <section class="block" id="pyBlock">
+            <div class="block-head">
+              <span class="block-title">拼音校对</span>
+              <span class="block-note" id="pyNote">点击拼音可切换多音字</span>
+            </div>
+            <div class="py-check" id="pyCheck"></div>
+          </section>
+
+          <!-- 设置 -->
+          <div id="panelSettings" class="settings"></div>
+        </div>
+
+        <div class="panel-foot">
+          <button class="btn btn-primary" id="btnPrint">
+            <svg viewBox="0 0 24 24" class="btn-ico"><path d="M6.5 9V3.5h11V9M6.5 18H5a1.5 1.5 0 0 1-1.5-1.5V12A1.5 1.5 0 0 1 5 10.5h14A1.5 1.5 0 0 1 20.5 12v4.5A1.5 1.5 0 0 1 19 18h-1.5M6.5 14h11v6.5h-11z"/></svg>
+            打印 / 存 PDF
+          </button>
+          <button class="btn btn-ghost" id="btnSavePreset">导出配置</button>
+        </div>
+      </aside>
+
+      <!-- 预览台 -->
+      <section class="stage">
+        <div class="stage-bar">
+          <div class="stage-bar-left">
+            <div class="seg-zoom">
+              <button class="icon-btn sm" id="zoomOut" title="缩小">
+                <svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg>
+              </button>
+              <span class="zoom-val" id="zoomVal">100%</span>
+              <button class="icon-btn sm" id="zoomIn" title="放大">
+                <svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>
+              </button>
+            </div>
+            <button class="btn btn-ghost btn-xs" id="zoomFit">适应宽度</button>
+            <span class="stage-divider"></span>
+            <span class="stage-info" id="stageInfo">1 页</span>
+          </div>
+          <div class="stage-bar-right">
+            <span class="stage-hint" id="stageHint">打印时请勾选「背景图形」</span>
+          </div>
+        </div>
+        <div class="stage-canvas" id="canvas">
+          <div class="pages" id="pages"></div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ============ 模板库 ============ -->
+  <section class="gallery" id="gallery">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">模板库</h2>
+        <p class="section-desc">16 种常用字帖版式，点一下即可套用，再微调成自己的。</p>
+      </div>
+    </div>
+    <div class="tpl-grid" id="tplGrid"></div>
+  </section>
+
+  <!-- ============ 素材 ============ -->
+  <section class="materials" id="materials">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">内置素材</h2>
+        <p class="section-desc">古诗、三字经、拼音表、字母、数字、成语……点开即用。</p>
+      </div>
+    </div>
+    <div class="mat-grid" id="matGrid"></div>
+  </section>
+
+  <!-- ============ 说明 ============ -->
+  <section class="guide" id="guide">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">使用说明</h2>
+        <p class="section-desc">三步出纸，打印细节都在这。</p>
+      </div>
+    </div>
+    <div class="guide-grid">
+      <article class="guide-card">
+        <span class="step">01</span>
+        <h3>输入内容</h3>
+        <p>在左侧输入要练的字、词、古诗或单词。换行表示另起一段，标点会被自动过滤（作文格与竖排除外）。</p>
+      </article>
+      <article class="guide-card">
+        <span class="step">02</span>
+        <h3>校对拼音</h3>
+        <p>多音字系统默认取最常见读音，可在「拼音校对」里点击切换，例如「了」le / liǎo、「行」xíng / háng。</p>
+      </article>
+      <article class="guide-card">
+        <span class="step">03</span>
+        <h3>打印成册</h3>
+        <p>点击「打印 / 存 PDF」，在打印窗口选择 A4、缩放 100%、<b>勾选「背景图形」</b>，即可得到与预览一致的字帖。</p>
+      </article>
+      <article class="guide-card">
+        <span class="step">04</span>
+        <h3>描红与临摹</h3>
+        <p>打开描红后，示范格后的练习格会显示淡淡的范字；把深浅调到 15% 左右，就是标准的临摹练习纸。</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<!-- ============ 页脚 ============ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-mark sm" aria-hidden="true">
+        <svg viewBox="0 0 40 40"><rect x="4" y="4" width="32" height="32" rx="7"/><path d="M11 14h18M11 20h18M11 26h18M20 11v18"/></svg>
+      </span>
+      <div>
+        <strong>字帖小助手 · Copybook Helper</strong>
+        <p>纯前端离线字帖排版工具 · 数据不出本机</p>
+      </div>
+    </div>
+    <nav class="footer-links">
+      <a href="#studio">生成器</a>
+      <a href="#gallery">模板库</a>
+      <a href="#materials">素材</a>
+      <a href="#guide">说明</a>
+    </nav>
+
+    <div class="socials">
+      <a class="social" href="https://github.com/Jdb156158/copybook" target="_blank" rel="noopener" title="GitHub 仓库">
+        <svg class="i-github" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-1.94c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.4-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+        <span>GitHub</span>
+      </a>
+      <a class="social" href="https://www.xiaohongshu.com/user/profile/5bcd9ff8c5602200010befae" target="_blank" rel="noopener" title="小红书主页">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.6C10.4 5.1 8.3 4.5 4 4.5v13.2c4.3 0 6.4.6 8 2.1 1.6-1.5 3.7-2.1 8-2.1V4.5c-4.3 0-6.4.6-8 2.1z"/><path d="M12 6.6v13.2"/></svg>
+        <span>小红书</span>
+      </a>
+      <a class="social" id="socialDouyin" href="https://www.douyin.com/search/jiadabing?type=user" target="_blank" rel="noopener" title="抖音：jiadabing">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.2 3.5v11.9a3.1 3.1 0 1 1-2.1-2.94"/><path d="M14.2 7.2c1.4 1.1 3.1 1.6 5 1.5"/></svg>
+        <span>抖音 · jiadabing</span>
+      </a>
+    </div>
+
+    <p class="footer-copy">© 2026 字帖小助手 · 用 ❤ 与 SVG 手工打造</p>
+  </div>
+</footer>
+
+<!-- ============ 素材弹层 ============ -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-mask" data-close></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <header class="modal-head">
+      <h3 id="modalTitle">素材库</h3>
+      <button class="icon-btn" data-close aria-label="关闭">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </header>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="assets/data/pinyin-data.js" defer></script>
+<script src="assets/js/core/pinyin.js" defer></script>
+<script src="assets/js/core/grids.js" defer></script>
+<script src="assets/js/core/templates.js" defer></script>
+<script src="assets/js/core/layout.js" defer></script>
+<script src="assets/js/core/render.js" defer></script>
+<script src="assets/js/core/store.js" defer></script>
+<script src="assets/js/ui/controls.js" defer></script>
+<script src="assets/js/ui/app.js" defer></script>
+</body>
+</html>
