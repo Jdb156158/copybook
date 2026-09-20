@@ -1,0 +1,103 @@
+/* ============================================================
+ * css/phone.css —— 手机版（iPhone 外壳内）布局
+ * 仅在 <body class="phone"> 下生效，桌面版完全不受影响。
+ * 视觉：宣纸暖白 / 墨黑 / 朱砂，毛玻璃 tabbar 与 sheet。
+ * ========================================================== */
+
+/* ---------- 隐藏桌面元素 ---------- */
+body.phone { margin: 0; height: 100svh; min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column;
+  background: var(--paper, #f2efe7); color: var(--ink, #1a1815);
+  -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+body.phone * { box-sizing: border-box; }
+body.phone .topbar,
+body.phone .hero,
+body.phone .materials,
+body.phone .guide,
+body.phone .footer,
+body.phone .studio { display: none !important; }
+
+/* ---------- 顶部状态栏 + 灵动岛 ---------- */
+body.phone .phone-status { position: relative; flex: none; height: 54px; padding: 6px 30px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 14px; font-weight: 600; letter-spacing: .3px; }
+body.phone .ps-time { color: var(--ink, #1a1815); }
+body.phone .ps-right { display: flex; align-items: center; gap: 5px; color: var(--ink, #1a1815); font-size: 12px; opacity: .85; }
+body.phone .island { position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+  width: 118px; height: 33px; background: #000; border-radius: 22px; }
+
+/* ---------- 预览主区 ---------- */
+body.phone .phone-main { position: relative; flex: 1; min-height: 0; display: flex; overflow: hidden; }
+body.phone .phone-main .stage { flex: 1; min-height: 0; display: flex; flex-direction: column; width: 100%; }
+body.phone .stage-bar { display: none !important; }
+body.phone .stage-canvas { flex: 1; min-height: 0; overflow: auto; -webkit-overflow-scrolling: touch;
+  display: flex; align-items: flex-start; justify-content: center; padding: 14px 12px 8px; }
+body.phone .pages { transform-origin: top center; margin: 0 auto; }
+body.phone .page-sheet { box-shadow: 0 8px 24px #0002; }
+
+/* ---------- 底部工具栏（玻璃质感） ---------- */
+body.phone .phone-tabbar { flex: none; display: flex; padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--paper, #f2efe7) 72%, transparent);
+  backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border-top: 1px solid color-mix(in srgb, var(--ink, #1a1815) 10%, transparent);
+  box-shadow: 0 -6px 20px #0001; gap: 2px; }
+body.phone .ptab { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink-soft, #6a6358);
+  display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 2px;
+  font-size: 10.5px; font-weight: 600; cursor: pointer; border-radius: 12px;
+  transition: background .15s, color .15s, transform .12s; touch-action: manipulation; }
+body.phone .ptab svg { width: 23px; height: 23px; }
+body.phone .ptab:active { transform: scale(.92); }
+body.phone .ptab.is-active { color: var(--accent, #b1392c); background: color-mix(in srgb, var(--accent, #b1392c) 12%, transparent); }
+body.phone .ptab.is-active svg { stroke: var(--accent, #b1392c); }
+
+/* ---------- 底部抽屉 sheet ---------- */
+body.phone .phone-sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  width: 100%; max-width: none; height: min(78svh, 560px);
+  display: flex; flex-direction: column;
+  background: color-mix(in srgb, var(--paper, #f2efe7) 88%, #fff);
+  backdrop-filter: blur(24px) saturate(1.5); -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  border: 1px solid color-mix(in srgb, var(--ink, #1a1815) 12%, transparent); border-bottom: 0;
+  border-radius: 26px 26px 0 0; box-shadow: 0 -16px 50px #0003;
+  transform: translateY(102%); transition: transform .26s cubic-bezier(.22,.8,.3,1);
+  padding-bottom: env(safe-area-inset-bottom, 0px); }
+body.phone .phone-sheet.open { transform: translateY(0); }
+body.phone .sheet-grab { flex: none; height: 22px; display: flex; align-items: center; justify-content: center; cursor: grab; touch-action: none; }
+body.phone .sheet-grab span { width: 38px; height: 5px; border-radius: 5px; background: color-mix(in srgb, var(--ink, #1a1815) 22%, transparent); }
+body.phone .sheet-head { flex: none; height: 46px; padding: 0 18px 6px; display: flex; align-items: center; justify-content: space-between; }
+body.phone .sheet-title { font-size: 17px; font-weight: 700; margin: 0; color: var(--ink, #1a1815); }
+body.phone .sheet-done { border: 0; background: transparent; color: var(--accent, #b1392c); font-size: 15px; font-weight: 600; padding: 4px 6px; cursor: pointer; }
+body.phone .sheet-content { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch; padding: 4px 18px 26px; }
+body.phone .phone-pan[hidden] { display: none; }
+
+/* 模板面板：隐藏原本的「模板库」小标题（抽屉标题已显示），卡片间距收紧 */
+body.phone .phone-pan[data-pan="tpl"] .section-head { display: none; }
+body.phone .phone-pan[data-pan="tpl"] .gallery { margin: 0; }
+body.phone .phone-pan[data-pan="tpl"] .tpl-grid { gap: 10px; }
+body.phone .phone-pan[data-pan="tpl"] .tpl-card { text-align: left; }
+
+/* sheet 内复用桌面控件，统一为手机宽度 */
+body.phone .sheet-content .pgroup { background: color-mix(in srgb, var(--paper, #f2efe7) 60%, #fff);
+  border: 1px solid color-mix(in srgb, var(--ink, #1a1815) 9%, transparent);
+  border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
+body.phone .sheet-content .pgroup-body-inner { padding: 6px 14px 14px; }
+body.phone .sheet-content .block { background: color-mix(in srgb, var(--paper, #f2efe7) 60%, #fff);
+  border: 1px solid color-mix(in srgb, var(--ink, #1a1815) 9%, transparent);
+  border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+body.phone .content-input { width: 100%; min-height: 96px; font-size: 16px; line-height: 1.6; }
+body.phone .py-check { display: flex; flex-wrap: wrap; gap: 8px; }
+body.phone .py-item { min-width: 52px; min-height: 52px; }
+body.phone .block-head { margin-bottom: 8px; }
+
+/* 深色模式微调 */
+body.phone[data-theme="dark"] .phone-tabbar,
+body.phone[data-theme="dark"] .phone-sheet { border-color: #ffffff22; }
+body.phone[data-theme="dark"] .sheet-content .pgroup,
+body.phone[data-theme="dark"] .sheet-content .block { background: #1c1a16; border-color: #ffffff1a; }
+
+@media (prefers-color-scheme: dark) {
+  body.phone:not([data-theme="light"]) .phone-tabbar,
+  body.phone:not([data-theme="light"]) .phone-sheet { border-color: #ffffff22; }
+  body.phone:not([data-theme="light"]) .sheet-content .pgroup,
+  body.phone:not([data-theme="light"]) .sheet-content .block { background: #1c1a16; border-color: #ffffff1a; }
+}

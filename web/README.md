@@ -35,6 +35,16 @@ python3 -m http.server 8770
 
 也可以直接双击 `index.html`（全站零依赖、零构建、无网络请求）。
 
+## 手机版 / iPhone 外壳版
+
+`mobile.html` 用一个 iPhone 金属外壳包裹字帖界面，外壳内是手机自适应布局：**顶部状态栏 + 灵动岛 + 字帖预览主区 + 底部玻璃工具栏 + 底部毛玻璃抽屉**。底部工具栏六个入口——模板 / 内容 / 拼音 / 设置 / 打印 / 主题，点开即调参，预览实时更新。适合手机访问，也像产品展示页一样把字帖效果装进 iPhone 里。
+
+- 在线：https://jdb156158.github.io/copybook/mobile.html
+- 本地：`python3 -m http.server 8770` 后打开 `http://127.0.0.1:8770/mobile.html`
+- 只想用手机布局、不要外壳：直接访问 `index.html?phone=1`（同一套控件与渲染，桌面端 URL 加参数即可切换）
+
+实现上，手机版与桌面版**共用全部业务逻辑与控件**：`?phone=1` 时 `app.js` 把左侧面板里的「练习内容 / 拼音校对 / 字格与样式」和模板库重排进底部抽屉，预览区自适应屏幕宽度，不复制任何业务代码。
+
 **打印**：点击「打印 / 存 PDF」→ 纸张选 A4、缩放 100% → 得到与预览一致的字帖；需要 PDF 时打印机选「另存为 PDF」。格线为 SVG 矢量元素，无需勾选「背景图形」也完整打印。
 
 ## 目录结构
@@ -74,6 +84,7 @@ web/
 ## 相关链接
 
 - 在线使用：**GitHub Pages** https://jdb156158.github.io/copybook/
+- 手机版（iPhone 外壳预览）：https://jdb156158.github.io/copybook/mobile.html
 - GitHub 仓库：https://github.com/Jdb156158/copybook
 - 小红书主页：https://www.xiaohongshu.com/user/profile/5bcd9ff8c5602200010befae
 - 抖音：`jiadabing`（站内搜索入口 https://www.douyin.com/search/jiadabing?type=user ，待替换为主页直达链接）
@@ -91,5 +102,6 @@ git subtree push --prefix web origin gh-pages
 
 ## 更新日志
 
+- 2026-09-20 v1.2 新增手机版 / iPhone 外壳版：`mobile.html` 用 iPhone 金属外壳包裹字帖界面，外壳内为手机自适应布局（状态栏 + 灵动岛 + 预览主区 + 底部玻璃工具栏 + 底部毛玻璃抽屉），底部工具栏六个入口（模板 / 内容 / 拼音 / 设置 / 打印 / 主题）即开即调，预览实时更新。手机版与桌面版共用全部业务逻辑与控件，仅 `?phone=1` 时重排布局。
 - 2026-09-20 v1.1 修复预览区拼音显示：拼音从「格内上方」改为「独立成行」，每个汉字行正上方各有一行四线三格拼音，拼音与汉字明显分隔；拼音区高度 0.34 格宽、字号 0.56，基线对齐四线三格第三条线，解决拼音压字、声调出格的问题。新增 GitHub Pages 在线访问与部署说明。
 - 2026-09-19 v1.0 首发：16 模板 / 12 格型 / 离线拼音 + 多音字校对 / 描红临摹 / 竖排古诗 / 控笔训练 / 深浅主题 / 打印导出。
