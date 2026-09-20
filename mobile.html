@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a1815">
+<title>字帖小助手 · iPhone 外壳版</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 50% 35%,#f4f0e7,#d8d1c2 78%);color:#6a6358;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;gap:16px}
+  .shell-label{font-size:11px;letter-spacing:3px;display:flex;gap:26px;align-items:center;font-weight:600}
+  .shell-label a{color:#8a7f6e;text-decoration:none;letter-spacing:1px;font-weight:600;transition:color .15s}
+  .shell-label a:hover{color:#b1392c}
+  .device-space{position:relative;flex:none}
+  /* iPhone 金属外壳 */
+  .device{width:414px;height:868px;padding:12px;background:linear-gradient(115deg,#8c857b,#23201c 15%,#6f695f 48%,#15120f 80%,#7a736a);
+    border-radius:61px;position:absolute;top:0;left:0;transform-origin:top left;
+    box-shadow:0 38px 76px #00000040,inset 0 0 0 2px #b3aa9c,inset 0 0 0 5px #16130f}
+  .device:before{content:'';position:absolute;left:-3px;top:172px;height:78px;width:4px;border-radius:3px;background:#5b554c;box-shadow:0 96px #5b554c}
+  .device:after{content:'';position:absolute;right:-3px;top:236px;height:104px;width:4px;border-radius:3px;background:#5b554c}
+  iframe{display:block;width:390px;height:844px;border:0;border-radius:49px;background:#f2efe7}
+  .shell-note{margin:0;font-size:11px;color:#938a78;letter-spacing:1px;text-align:center;max-width:380px}
+  @media(max-width:450px){body{padding:8px;gap:8px}.shell-label{font-size:9px}.shell-note{display:none}}
+</style>
+</head>
+<body>
+  <div class="shell-label">
+    <span>字帖小助手 / 手机版</span>
+    <a href="index.html" target="_blank" rel="noopener">桌面版 ↗</a>
+  </div>
+  <div class="device-space">
+    <div class="device">
+      <iframe src="index.html?phone=1" title="字帖小助手 iPhone 版"></iframe>
+    </div>
+  </div>
+  <p class="shell-note">在手机内输入文字、切换模板、校对拼音、调节字格与配色 · 底部工具栏即开即用</p>
+  <script>
+    function fitDevice(){
+      var scale = Math.min(1, (innerWidth-26)/414, (innerHeight-96)/868);
+      var d = document.querySelector('.device');
+      d.style.transform = 'scale(' + scale + ')';
+      var sp = document.querySelector('.device-space');
+      sp.style.width = (414*scale) + 'px';
+      sp.style.height = (868*scale) + 'px';
+    }
+    addEventListener('resize', fitDevice);
+    fitDevice();
+  </script>
+</body>
+</html>

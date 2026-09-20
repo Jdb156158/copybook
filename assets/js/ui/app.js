@@ -34,6 +34,7 @@
   /* ---------------- 状态 ---------------- */
   var zoom = 1, lastSize = null, rafId = 0;
   var PANEL_REBUILD_KEYS = { trace: 1, showPinyin: 1, mode: 1, template: 1 };
+  var PHONE = /[?&]phone=1/.test(location.search);
 
   /* ---------------- Toast ---------------- */
   function toast(msg, kind) {
@@ -530,6 +531,15 @@
       res.cellCount + ' 格 · ' + s.pageSize;
     updatePrintRule(res.size);
     applyZoom();
+    if (PHONE) phoneFit();
+  }
+
+  /** 手机版：预览宽度自适应（不裁剪） */
+  function phoneFit() {
+    if (!lastSize) return;
+    var cw = ($('#canvas').clientWidth || 360) - 24;
+    zoom = Math.max(0.25, Math.min(1.5, cw / lastSize.w));
+    applyZoom();
   }
 
   function schedulePreview() {
@@ -670,6 +680,117 @@
     });
   }
 
+  /* ---------------- 手机版（iPhone 外壳内） ---------------- */
+  function initPhone() {
+    document.body.classList.add('phone');
+
+    /* 状态栏 + 灵动岛 */
+    var status = document.createElement('div');
+    status.className = 'phone-status';
+    var now = new Date();
+    var hh = now.getHours(), mm = ('0' + now.getMinutes()).slice(-2);
+    status.innerHTML = '<span class="ps-time">' + hh + ':' + mm + '</span>' +
+      '<span class="island" aria-hidden="true"></span>' +
+      '<span class="ps-right" aria-hidden="true">●‌‌ ●‌ ●‌ 5G ▮</span>';
+
+    /* 预览主区：把桌面 .stage 移入 */
+    var main = document.createElement('div');
+    main.className = 'phone-main';
+    var stage = document.querySelector('.stage');
+    if (stage) main.appendChild(stage);
+
+    /* 底部工具栏 */
+    var TABS = [
+      { tab: 'tpl', label: '模板', html: icon('book') },
+      { tab: 'content', label: '内容', html: icon('write') },
+      { tab: 'py', label: '拼音', html: icon('pinyin') },
+      { tab: 'set', label: '设置', html: icon('hanzi') },
+      { tab: 'print', label: '打印', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9V3.5h11V9M6.5 18H5a1.5 1.5 0 0 1-1.5-1.5V12A1.5 1.5 0 0 1 5 10.5h14A1.5 1.5 0 0 1 20.5 12v4.5A1.5 1.5 0 0 1 19 18h-1.5M6.5 14h11v6.5h-11z"/></svg>' },
+      { tab: 'theme', label: '主题', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>' }
+    ];
+    var tabbar = document.createElement('div');
+    tabbar.className = 'phone-tabbar';
+    tabbar.innerHTML = TABS.map(function (t) {
+      return '<button type="button" class="ptab" data-tab="' + t.tab + '">' + t.html +
+        '<span>' + t.label + '</span></button>';
+    }).join('');
+
+    /* 底部抽屉 */
+    var sheet = document.createElement('div');
+    sheet.className = 'phone-sheet';
+    sheet.innerHTML = '<div class="sheet-grab"><span></span></div>' +
+      '<div class="sheet-head"><h2 class="sheet-title">设置</h2><button type="button" class="sheet-done">完成</button></div>' +
+      '<div class="sheet-content"></div>';
+    var sheetContent = sheet.querySelector('.sheet-content');
+
+    document.body.appendChild(status);
+    document.body.appendChild(main);
+    document.body.appendChild(tabbar);
+    document.body.appendChild(sheet);
+
+    /* 重排控件：把桌面面板里的各区块移入对应面板容器 */
+    var pans = {};
+    ['tpl', 'content', 'py', 'set'].forEach(function (k) {
+      var d = document.createElement('div');
+      d.className = 'phone-pan';
+      d.setAttribute('data-pan', k);
+      d.hidden = true;
+      sheetContent.appendChild(d);
+      pans[k] = d;
+    });
+    var gallery = document.getElementById('gallery');
+    if (gallery) pans.tpl.appendChild(gallery);
+    var contentBlock = document.querySelector('#panel .block');
+    if (contentBlock) pans.content.appendChild(contentBlock);
+    var pyBlock = document.getElementById('pyBlock');
+    if (pyBlock) pans.py.appendChild(pyBlock);
+    var panelSettings = document.getElementById('panelSettings');
+    if (panelSettings) pans.set.appendChild(panelSettings);
+    var panelFoot = document.querySelector('.panel-foot');
+    if (panelFoot) panelFoot.style.display = 'none';
+
+    var TITLES = { tpl: '模板库', content: '练习内容', py: '拼音校对', set: '字格与样式' };
+
+    function openSheet(k) {
+      ['tpl', 'content', 'py', 'set'].forEach(function (x) { pans[x].hidden = x !== k; });
+      sheet.querySelector('.sheet-title').textContent = TITLES[k] || '设置';
+      sheet.classList.add('open');
+      tabbar.querySelectorAll('.ptab').forEach(function (b) {
+        b.classList.toggle('is-active', b.getAttribute('data-tab') === k);
+      });
+    }
+    function closeSheet() {
+      sheet.classList.remove('open');
+      tabbar.querySelectorAll('.ptab').forEach(function (b) { b.classList.remove('is-active'); });
+    }
+
+    tabbar.addEventListener('click', function (e) {
+      var b = e.target.closest('.ptab');
+      if (!b) return;
+      var k = b.getAttribute('data-tab');
+      if (k === 'print') { closeSheet(); doPrint(); return; }
+      if (k === 'theme') { var t = document.getElementById('themeToggle'); if (t) t.click(); return; }
+      if (sheet.classList.contains('open') && sheet.querySelector('.sheet-title').textContent === (TITLES[k] || '设置')) {
+        closeSheet();
+      } else {
+        openSheet(k);
+      }
+    });
+
+    sheet.querySelector('.sheet-done').addEventListener('click', closeSheet);
+    sheet.querySelector('.sheet-grab').addEventListener('click', closeSheet);
+
+    /* 模板选中后关闭抽屉（预览已实时更新） */
+    var tplGrid = document.getElementById('tplGrid');
+    if (tplGrid) tplGrid.addEventListener('click', function (e) {
+      if (e.target.closest('.tpl-card')) setTimeout(closeSheet, 0);
+    });
+
+    /* 初始自适应 + 尺寸变化重排 */
+    phoneFit();
+    window.addEventListener('resize', function () { if (PHONE) phoneFit(); });
+  }
+
   /* ---------------- 启动 ---------------- */
   function init() {
     var loaded = S.load();
@@ -691,6 +812,7 @@
     renderPreview();
     fitZoom();
     $('#statTpl').textContent = T.TEMPLATES.length;
+    if (PHONE) initPhone();
   }
 
   if (document.readyState === 'loading') {
