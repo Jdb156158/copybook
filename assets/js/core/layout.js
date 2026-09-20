@@ -43,7 +43,11 @@
           parts = parts[0].split('');
         }
         for (j = 0; j < parts.length; j++) {
-          out.push({ c: parts[j], py: '' });
+          var p = parts[j];
+          // 安全网：如果混入了汉字等不适配字符，整段跳过，避免撑乱版式
+          if (/[\u4e00-\u9fff\u3400-\u4dbf]/.test(p)) continue;
+          if (mode === 'number' && /[A-Za-z]/.test(p)) continue;
+          out.push({ c: p, py: '' });
         }
       }
     }

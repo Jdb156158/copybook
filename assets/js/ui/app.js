@@ -15,6 +15,38 @@
     });
   }
 
+  /* 受限制输入的模板模式：输入时自动过滤掉不适合的字符 */
+  var RESTRICTED_MODES = { pinyin: 1, english: 1, number: 1 };
+  var MODE_HINTS = {
+    pinyin: '拼音模板已自动过滤汉字，仅保留拼音字母与声调。',
+    english: '英文模板已自动过滤汉字，仅保留英文字母与空格。',
+    number: '数字模板已自动过滤汉字与字母，仅保留数字与算式符号。'
+  };
+  function sanitizeText(value, mode) {
+    if (!RESTRICTED_MODES[mode]) return value;
+    var s = String(value || '');
+    // 全角数字/字母转半角
+    s = s.replace(/[\uFF10-\uFF19]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); });
+    s = s.replace(/[\uFF21-\uFF3A\uFF41-\uFF5A]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); });
+    // 过滤 CJK 汉字/扩展 A / CJK 标点 / 全角符号
+    s = s.replace(/[\u4e00-\u9fff\u3400-\u4dbf\u3000-\u303F\uFF00-\uFFEF]+/g, ' ');
+    if (mode === 'number') s = s.replace(/[a-zA-Z]/g, '');
+    // 折叠多余空格，保留换行
+    return s.replace(/[ \t]+/g, ' ').replace(/^[ \t]+|[ \t]+$/gm, '');
+  }
+  function updateInputHint() {
+    var el = $('#inputHint');
+    if (!el) return;
+    var mode = S.get().mode;
+    if (RESTRICTED_MODES[mode]) {
+      el.textContent = MODE_HINTS[mode];
+      el.hidden = false;
+    } else {
+      el.textContent = '';
+      el.hidden = true;
+    }
+  }
+
   var ICONS = {
     hanzi: '<rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M12 3.5v17M3.5 12h17"/>',
     pinyin: '<path d="M3 6.5h18M3 11h18M3 15.5h18"/><path d="M8.5 6.5v5M15 11v4.5"/>',
@@ -266,7 +298,10 @@
   function applyTemplate(id) {
     var tpl = S.applyTemplate(id);
     buildPanel(true);
+    var clean = sanitizeText(S.get().text, S.get().mode);
+    if (clean !== S.get().text) S.set('text', clean, true);
     $('#textInput').value = S.get().text || '';
+    updateInputHint();
     updateTplCurrent();
     renderPyCheck();
     schedulePreview();
@@ -313,8 +348,11 @@
 
   function applyMaterial(item) {
     if (item.mode) S.set('mode', item.mode);
-    S.set('text', item.text);
-    $('#textInput').value = item.text;
+    var mode = item.mode || S.get().mode;
+    var clean = sanitizeText(item.text, mode);
+    S.set('text', clean);
+    $('#textInput').value = clean;
+    updateInputHint();
     buildPanel(true);
     renderPyCheck();
     schedulePreview();
@@ -623,6 +661,17 @@
     /* 内容输入 */
     var ta = $('#textInput');
     ta.addEventListener('input', function () {
+      var mode = S.get().mode;
+      var clean = sanitizeText(ta.value, mode);
+      if (clean !== ta.value) {
+        var start = ta.selectionStart;
+        var oldLen = ta.value.length;
+        ta.value = clean;
+        // 尽量保留光标位置：移除的字符在光标前则回退；否则保持
+        var diff = oldLen - clean.length;
+        if (diff > 0 && start > 0) start = Math.max(0, start - diff);
+        ta.setSelectionRange(start, start);
+      }
       S.set('text', ta.value);
       renderPyCheck();
       schedulePreview();
@@ -807,7 +856,10 @@
     updateTplCurrent();
     markActiveTemplate();
     var ta = $('#textInput');
+    var clean = sanitizeText(S.get().text, S.get().mode);
+    if (clean !== S.get().text) S.set('text', clean, true);
     ta.value = S.get().text || '';
+    updateInputHint();
     renderPyCheck();
     renderPreview();
     fitZoom();
