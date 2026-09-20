@@ -167,6 +167,10 @@ main { position: relative; z-index: 1; }
   transition: all .18s var(--ease);
 }
 .content-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--ring); background: var(--surface); }
+.input-hint {
+  margin: -4px 0 4px; font-size: 11.5px; line-height: 1.45;
+  color: var(--ink-3); min-height: 1.4em;
+}
 .quick-row { display: flex; align-items: center; gap: 6px; padding: 10px 0 12px; flex-wrap: wrap; }
 .quick-label { font-size: 11.5px; color: var(--ink-4); margin-right: 2px; }
 .quick {
