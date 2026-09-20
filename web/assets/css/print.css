@@ -1,0 +1,55 @@
+/* ============================================================
+ * print.css —— 打印 / 导出 PDF（仅保留字帖页，矢量输出）
+ * ========================================================== */
+@media print {
+  @page { size: A4 portrait; margin: 0; }
+
+  html, body {
+    background: #fff !important;
+    width: auto; height: auto; margin: 0; padding: 0;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .paper-grain,
+  .topbar,
+  .hero,
+  .panel,
+  .stage-bar,
+  .gallery,
+  .materials,
+  .guide,
+  .footer,
+  .modal,
+  .toasts,
+  .section-head { display: none !important; }
+
+  main { padding: 0 !important; }
+  .studio { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+  .studio-grid { display: block !important; gap: 0 !important; }
+
+  .stage {
+    display: block !important;
+    min-height: 0 !important; border: 0 !important; border-radius: 0 !important;
+    box-shadow: none !important; overflow: visible !important; background: #fff !important;
+  }
+  .stage-canvas {
+    display: block !important; overflow: visible !important;
+    padding: 0 !important; margin: 0 !important;
+    background: #fff !important; background-image: none !important;
+    height: auto !important;
+  }
+  .pages {
+    display: block !important; width: auto !important; margin: 0 !important;
+    transform: none !important; gap: 0 !important;
+  }
+
+  .cb-page {
+    box-shadow: none !important; border-radius: 0 !important;
+    margin: 0 !important; page-break-after: always; break-after: page;
+  }
+  .cb-page:last-child { page-break-after: auto; break-after: auto; }
+  .cb-page::after { display: none !important; }
+  .cb-page { page-break-inside: avoid; break-inside: avoid; }
+}
