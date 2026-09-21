@@ -446,15 +446,17 @@
   ];
 
   /* ---------------- 字体预设 ---------------- */
+  /* 字体名称统一用单引号包裹：render.js 会把 stack 直接拼进 style="…" 双引号属性，
+     若用双引号会导致内层引号提前闭合、整条 font-family 被浏览器截断（切换字体无变化）。 */
   var FONTS = [
-    { id: 'kaiti', name: '楷体', stack: '"Kaiti SC","STKaiti","KaiTi","Kaiti TC","楷体",serif' },
-    { id: 'xingkai', name: '行楷', stack: '"Xingkai SC","STXingkai","华文行楷",cursive,serif' },
-    { id: 'songti', name: '宋体', stack: '"Songti SC","SimSun","宋体","STSong",serif' },
-    { id: 'heiti', name: '黑体', stack: '"PingFang SC","Hiragino Sans GB","Heiti SC","Microsoft YaHei",sans-serif' },
-    { id: 'lishu', name: '隶书', stack: '"STLibian","LiSu","隶书",serif' },
-    { id: 'yuanti', name: '圆体', stack: '"Yuanti SC","YouYuan","幼圆",sans-serif' },
-    { id: 'songti-bold', name: '宋体加粗', stack: '"Songti SC","SimSun",serif', weight: 700 },
-    { id: 'english', name: '英文手写', stack: '"Snell Roundhand","Bradley Hand","Segoe Script","Comic Sans MS",cursive' }
+    { id: 'kaiti', name: '楷体', stack: "'Kaiti SC','STKaiti','KaiTi','Kaiti TC','楷体',serif" },
+    { id: 'xingkai', name: '行楷', stack: "'Xingkai SC','STXingkai','华文行楷',cursive,serif" },
+    { id: 'songti', name: '宋体', stack: "'Songti SC','SimSun','宋体','STSong',serif" },
+    { id: 'heiti', name: '黑体', stack: "'PingFang SC','Hiragino Sans GB','Heiti SC','Microsoft YaHei',sans-serif" },
+    { id: 'lishu', name: '隶书', stack: "'STLibian','LiSu','隶书',serif" },
+    { id: 'yuanti', name: '圆体', stack: "'Yuanti SC','YouYuan','幼圆',sans-serif" },
+    { id: 'songti-bold', name: '宋体加粗', stack: "'Songti SC','SimSun',serif", weight: 700 },
+    { id: 'english', name: '英文手写', stack: "'Snell Roundhand','Bradley Hand','Segoe Script','Comic Sans MS',cursive" }
   ];
 
   /* ---------------- 配色预设 ---------------- */
